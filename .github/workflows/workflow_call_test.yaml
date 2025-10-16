@@ -1,0 +1,16 @@
+---
+name: test (workflow_call)
+on: workflow_call
+permissions: {}
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    permissions: {}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - run: echo foo > foo.txt
+      - run: echo bar >> README.txt
+      - run: rm LICENSE
+      - uses: ./
