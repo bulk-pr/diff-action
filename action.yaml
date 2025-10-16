@@ -47,7 +47,7 @@ runs:
             ext=${file##*.}
             typ=""
             case "$ext" in
-              go|js|md|sh|toml|ts|yaml|yml) typ="$ext ;;
+              go|js|md|sh|toml|ts|yaml|yml) typ="$ext" ;;
             esac
             echo "<details>"
             echo "<summary>$file</summary>"
