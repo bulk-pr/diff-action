@@ -51,9 +51,11 @@ runs:
             esac
             echo "<details>"
             echo "<summary>$file</summary>"
+            echo ""
             echo "${BLOCK}${typ}"
             cat "$file"
             echo "$BLOCK"
+            echo ""
             echo "</details>"
           done
         } >> "$GITHUB_STEP_SUMMARY"
