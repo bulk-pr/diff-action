@@ -1,0 +1,59 @@
+name: Show diff
+description: Show diff
+author: Shunsuke Suzuki
+inputs:
+  working-directory:
+    description: The working directory
+    required: false
+    default: ""
+branding:
+  icon: git-commit
+  color: blue
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      working-directory: ${{inputs.working-directory}}
+      run: |
+        git status
+        echo "---"
+        echo ""
+        git diff
+        echo "---"
+        echo ""
+        git ls-files --others --exclude-standard | while read -r file; do
+          echo "New file ($file):"
+          cat $file
+          echo "---"
+          echo ""
+        done
+
+    - shell: bash
+      working-directory: ${{inputs.working-directory}}
+      env:
+        BLOCK: "```"
+      run: |
+        {
+          echo "## git status"
+          echo "$BLOCK"
+          git status
+          echo "$BLOCK"
+          echo "## git diff"
+          echo "${BLOCK}diff"
+          git diff
+          echo "$BLOCK"
+          echo "## New files"
+          git ls-files --others --exclude-standard | while read -r file; do
+            ext=${file##*.}
+            typ=""
+            case "$ext" in
+              go|js|md|sh|toml|ts|yaml|yml) typ="$ext ;;
+            esac
+            echo "<details>"
+            echo "<summary>$file</summary>"
+            echo "${BLOCK}${typ}"
+            cat "$file"
+            echo "$BLOCK"
+            echo "</details>"
+          done
+        } >> "$GITHUB_STEP_SUMMARY"
