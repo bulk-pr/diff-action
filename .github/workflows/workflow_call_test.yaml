@@ -11,6 +11,8 @@ jobs:
         with:
           persist-credentials: false
       - run: echo foo > foo.txt
+      - run: |
+          echo 'foo: bar' > foo.yml
       - run: echo bar >> README.md
       - run: rm LICENSE
       - uses: ./
