@@ -1,0 +1,66 @@
+name: Show diff
+description: Show diff
+author: Shunsuke Suzuki
+inputs:
+  working-directory:
+    description: The working directory
+    required: false
+    default: ""
+branding:
+  icon: git-commit
+  color: blue
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      working-directory: ${{inputs.working-directory}}
+      run: |
+        git status
+        echo "---"
+        echo ""
+        git diff --diff-filter=d
+        echo "---"
+        echo ""
+        git ls-files --others --exclude-standard | while read -r file; do
+          echo "New file ($file):"
+          cat $file
+          echo "---"
+          echo ""
+        done
+
+    - shell: bash
+      working-directory: ${{inputs.working-directory}}
+      env:
+        BLOCK: "```"
+      # TODO Check the size of the summary
+      # The summary is limited to 1 MiB.
+      # > If more than 1MiB of content is added for a step, then the upload for the step will fail and an error annotation will be created.
+      # https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#step-isolation-and-limits
+      run: |
+        {
+          echo "## git status"
+          echo "$BLOCK"
+          git status
+          echo "$BLOCK"
+          echo "## git diff"
+          echo "${BLOCK}diff"
+          git diff --diff-filter=d
+          echo "$BLOCK"
+          echo "## New files"
+          git ls-files --others --exclude-standard | while read -r file; do
+            ext=${file##*.}
+            typ=""
+            case "$ext" in
+              go|js|md|sh|toml|ts|yaml|yml) typ="$ext" ;;
+            esac
+            echo "<details>"
+            echo "<summary>$file</summary>"
+            echo ""
+            echo "${BLOCK}${typ}"
+            cat "$file"
+            echo "$BLOCK"
+            echo ""
+            echo "</details>"
+          done
+        } >> "$GITHUB_STEP_SUMMARY"
+        echo "::notice:: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
