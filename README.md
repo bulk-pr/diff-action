@@ -2,7 +2,7 @@
 
 diff-action is a GitHub Action to output the diff to stdout/stderr and a GitHub Job Summary.
 
-![github-job-summary](https://github.com/user-attachments/assets/1cb3f24b-5a29-4abd-beb0-24f99afa2403)
+![github-job-summary](https://github.com/user-attachments/assets/4ad1c429-da91-4c44-a289-dec9dd98e809)
 
 ```
 Run git status
