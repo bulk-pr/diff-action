@@ -18,7 +18,7 @@ runs:
         git status
         echo "---"
         echo ""
-        git diff
+        git diff --diff-filter=d
         echo "---"
         echo ""
         git ls-files --others --exclude-standard | while read -r file; do
@@ -40,7 +40,7 @@ runs:
           echo "$BLOCK"
           echo "## git diff"
           echo "${BLOCK}diff"
-          git diff
+          git diff --diff-filter=d
           echo "$BLOCK"
           echo "## New files"
           git ls-files --others --exclude-standard | while read -r file; do
