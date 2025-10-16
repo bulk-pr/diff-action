@@ -32,6 +32,10 @@ runs:
       working-directory: ${{inputs.working-directory}}
       env:
         BLOCK: "```"
+      # TODO Check the size of the summary
+      # The summary is limited to 1 MiB.
+      # > If more than 1MiB of content is added for a step, then the upload for the step will fail and an error annotation will be created.
+      # https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#step-isolation-and-limits
       run: |
         {
           echo "## git status"
